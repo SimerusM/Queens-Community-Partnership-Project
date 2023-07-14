@@ -6,7 +6,7 @@ const ProjectDetails = ({ project }) => {
     const [buttonPopup, setButtonPopup] = useState(false);
     const [buttonImagePopup, setButtonImagePopup] = useState(false);
 
-
+    // console.log(project)
     // Extracting SDG title name's number and storing it in variable to use in details
     var str = project.sdg.toString()
     var sdg_num = str.match(/(\d+)/) 
@@ -135,7 +135,7 @@ const ProjectDetails = ({ project }) => {
 
                     <div className="card-assignment">
                         
-                        {project.website_url !== '' ?
+                        {project.website_orginization !== '' ?
                             <div><strong>Organization:</strong> {project.orginization}</div>
                             :
                             <div><strong>Organization:</strong> No organization available</div>
@@ -149,7 +149,7 @@ const ProjectDetails = ({ project }) => {
                     <div className="card-assignment">
                         <strong>Website source URL: </strong> 
                         {project.website_url !== '' ?
-                            <a style={{color: "blue"}}href={project.website_url} target="_blank"><u>Website Link</u></a>
+                            <a style={{color: "blue"}} href={project.website_url} target="_blank" rel="noreferrer"><u>Website Link</u></a>
                             :
                             " No website link available"
                         }
@@ -171,7 +171,7 @@ const ProjectDetails = ({ project }) => {
                     <div className="card-assignment">
                         <strong>Source: </strong> 
                         {project.source !== '' ?
-                            <a style={{color: "blue"}} href={project.source} target="_blank"><u>Source Link</u></a>
+                            <a style={{color: "blue"}} href={project.source} target="_blank" rel="noreferrer"><u>Source Link</u></a>
                             :
                             " No source link available"
                         }
@@ -180,7 +180,7 @@ const ProjectDetails = ({ project }) => {
                 </Popup>
                 
                 <Popup trigger={buttonImagePopup} setTrigger={setButtonImagePopup}>
-                    <img src={'http://localhost:4000/images/' + project.img_filename} className="preview-img"></img>
+                    <img src={project.img_filename} className="preview-img" alt="preview"></img>
                 </Popup>
 
             </div>
