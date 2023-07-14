@@ -6,6 +6,7 @@ import { adminOrganizationOptions } from "./AdminCategoryLists";
 import { keywordsOptions } from "../FilterComponents/CategoryArrays/KeywordsOptions";
 import Multiselect from "multiselect-react-dropdown"
 import Select from 'react-select';
+import axios from 'axios';
 
 const ProjectAdminForm = () => {
     // Adding basic info
@@ -30,25 +31,8 @@ const ProjectAdminForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault() // Prevents refresh of page from happening
-        console.log('button clicked')
-        console.log(img)
 
-        // get the image data from the form submission
-
-        // Convert image file to form data
-
-        const imageForm = new FormData()
-        imageForm.append('image', img[0])
-
-        const imgResponse = await fetch('/api/single', {
-            method: 'POST',
-            body: imageForm
-        })
-
-        const imgResponseJson = await imgResponse.json()
-
-        const project = {img_filename: imgResponseJson.filename, sdg, goal, orginization, source, location, published, website_url, assignment_type, keywords, sharepoint_link, statement, relationship_manager}
-        console.log({project})
+        const project = {sdg, goal, orginization, source, location, published, website_url, assignment_type, keywords, sharepoint_link, statement, relationship_manager}
         // Sending form response to backend
         const response = await fetch('/api/projects', {
             method: 'POST',
@@ -84,8 +68,58 @@ const ProjectAdminForm = () => {
         }
     }
 
+    const onSelectFile = async (event) => {
+        event.preventDefault()
+        const file = event.target.files[0];
+        console.log(file);
+        
+        // get secure url from aws server
+        const { url } = await fetch("/api/s3Url").then(res => res.json())
+        console.log(url)
+
+        // post image directly to s3 bucket
+        await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: file
+        })
+        
+        const imageUrl = url.split('?')[0]
+        console.log(imageUrl)
+
+        // post request to backend to store extra data
+        
+    }
+
+
+    // on selection of image in form
+    // const onSelectFile = async (event) => {
+    //     const file = event.target.files[0];
+    //     const convertedFile = await convertToBase64(file);
+
+    //     // const s3URL = await axios.post(
+    //     //     'http://localhost:4000/api/upload',
+    //     //     {
+    //     //         // image: convertedFile,
+    //     //         imageName: file.name
+    //     //     }
+    //     // ).then(() => {console.log("test")})
+    //     const s3URL = await fetch('/api/s3Url', {
+    //         method: 'GET',
+    //         // body: JSON.stringify({
+    //         //     imageName: file.name,
+    //         //     // image: convertedFile
+    //         // }),
+    //         headers: {'Content-Type': 'application/json'},
+    //       }
+    //     ).then((res) => console.log(res))
+    // }
+
+
     return (
-        <form className="create project-form" enctype="multipart/form-data" onSubmit={handleSubmit}>
+        <form className="create project-form" encType="multipart/form-data" onSubmit={handleSubmit}>
             <h2 style={{"textAlign": "center"}}>Add a New Project</h2>
 
             <label>Sustainable Development Goal:</label>
@@ -197,11 +231,17 @@ const ProjectAdminForm = () => {
             />
 
             <label>OPTIONAL - Preview image:</label>
-            <input
+            {/* <input
                 type="file"
                 name="myImage"
                 accept="image/*"
                 onChange={(e) => setImg(e.target.files)}
+            /> */}
+            <input 
+                type="file" 
+                accept="image/*" 
+                onChange={onSelectFile}
+                // onChange={(e) => setImg(e.target.files)}
             />
             
             <div className="add-proj">

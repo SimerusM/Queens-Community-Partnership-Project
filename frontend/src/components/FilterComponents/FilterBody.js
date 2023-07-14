@@ -37,10 +37,6 @@ class FilterBody extends React.Component {
     // Handling all 3 input submissions
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.theme)
-        console.log(this.state.projects)
-        console.log(this.state.keywords)
-        console.log(this.state.orginization)
 
         this.setState({ showProjects: true })
 
@@ -60,8 +56,6 @@ class FilterBody extends React.Component {
             .then(response => response.json())
             .then(json => (this.setState({projects: json, jsonLength: json.length})))
             .then(jsonLength => console.log(jsonLength))
-
-        console.log(this.state.projects.length)
         
     }
 
