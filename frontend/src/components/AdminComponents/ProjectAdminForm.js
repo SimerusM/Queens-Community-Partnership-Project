@@ -30,25 +30,28 @@ const ProjectAdminForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault() // Prevents refresh of page from happening
-        console.log('button clicked')
-        console.log(img)
 
-        // get the image data from the form submission
+        const file = img[0];
+        
+        // get secure url from aws server
+        const { url } = await fetch("/api/s3Url").then(res => res.json())
+        // console.log(url)
 
-        // Convert image file to form data
-
-        const imageForm = new FormData()
-        imageForm.append('image', img[0])
-
-        const imgResponse = await fetch('/api/single', {
-            method: 'POST',
-            body: imageForm
+        // post image directly to s3 bucket
+        await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: file
         })
+        
+        const imageUrl = url.split('?')[0]
+        // console.log(imageUrl)
 
-        const imgResponseJson = await imgResponse.json()
 
-        const project = {img_filename: imgResponseJson.filename, sdg, goal, orginization, source, location, published, website_url, assignment_type, keywords, sharepoint_link, statement, relationship_manager}
-        console.log({project})
+        const project = {sdg, goal, orginization, source, location, published, website_url, assignment_type, keywords, sharepoint_link, statement, relationship_manager, img_filename: imageUrl}
+        console.log(project)
         // Sending form response to backend
         const response = await fetch('/api/projects', {
             method: 'POST',
@@ -58,6 +61,8 @@ const ProjectAdminForm = () => {
             }
         })
         const json = await response.json
+
+        
 
         // Checking for error
         if (!response.ok) {
@@ -84,8 +89,9 @@ const ProjectAdminForm = () => {
         }
     }
 
+
     return (
-        <form className="create project-form" enctype="multipart/form-data" onSubmit={handleSubmit}>
+        <form className="create project-form" encType="multipart/form-data" onSubmit={handleSubmit}>
             <h2 style={{"textAlign": "center"}}>Add a New Project</h2>
 
             <label>Sustainable Development Goal:</label>
@@ -197,10 +203,10 @@ const ProjectAdminForm = () => {
             />
 
             <label>OPTIONAL - Preview image:</label>
-            <input
-                type="file"
-                name="myImage"
-                accept="image/*"
+            <input 
+                type="file" 
+                accept="image/*" 
+                // onChange={onSelectFile}
                 onChange={(e) => setImg(e.target.files)}
             />
             

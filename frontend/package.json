@@ -24,6 +24,9 @@
   "@testing-library/user-event": "^13.5.0",
   
     
+  "axios": "^1.4.0",
+  
+    
   "http-proxy-middleware": "^2.0.6",
   
     

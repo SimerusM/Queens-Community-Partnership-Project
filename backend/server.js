@@ -4,45 +4,34 @@ const express =  require('express')
 const mongoose = require('mongoose')
 const projectRoutes = require('./routes/projects')
 
+// aws file import
+const s3 = require('./s3.cjs')
 
-// const bodyParser = require("body-parser")
+const bodyParser = require("body-parser")
 
 // express app
 const app = express()
 
-
-// image upload
-const multer = require('multer')
-const { v4: uuidv4 } = require('uuid');
-const fileStorageEngine = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './public')
-    },
-    filename: (req, file, cb) => {
-        cb(null, uuidv4() + '--' + file.originalname)
-    }
-});
-
-const upload = multer({ storage: fileStorageEngine });
-
-app.post('/api/single', upload.single('image'), (req, res) => {
-    console.log(req.file)
-    // res.send("Single File upload success")
-    res.json({filename: req.file.filename})
-});
-
-app.use('/images', express.static('public'))
-
-
-
-
 // middleware
 app.use(express.json())
-
 
 app.use((req, res, next) => {
     console.log(req.path, req.method)
     next()
+})
+
+// aws s3 url fetch
+app.get('/api/s3Url', async (req, res) => {
+    const url = await s3.generateUploadURL()
+    res.send({url})
+})
+
+// aws image name upload to MongoDB
+app.get('/api/upload', (req, res) => {
+    res.json({
+        t: "sdfsd"
+    })
+    
 })
 
 // routes
