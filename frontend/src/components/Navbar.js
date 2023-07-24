@@ -48,6 +48,9 @@ const Navbar = () => {
                                     <a href="/filter">Catalogue</a>
                                 </li>
                                 <li>
+                                    <a href="/map">Map</a>
+                                </li>
+                                <li>
                                     <a href="/contact">Contact Us</a>
                                 </li>
                             </ul>
@@ -64,18 +67,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-
-// import { Link } from 'react-router-dom'
-
-// const Navbar = () => {
-//     return (
-//         <header>
-//             <div className="container">
-//                 <Link to="/">
-//                     <h1>Temp Navbar</h1>
-//                 </Link>
-//             </div>
-//         </header>
-//     )
-// }
-// export default Navbar

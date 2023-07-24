@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Contact from './pages/Contact'
 import Admin from './pages/Admin'
+import Map from './pages/Map'
 
 function App() {
   return (
@@ -30,6 +31,10 @@ function App() {
           <Route 
             path="/admin-page"
             element={<Admin />}
+          />
+          <Route 
+            path="/map"
+            element={<Map />}
           />
         </Routes>
       </div>
