@@ -23,7 +23,6 @@ export default function Admin(){
 
             if (response.ok) {
                 setProjects(json)
-                // dispatch({type: 'SET_PROJECTS', payload: json})
             }
         } 
 
