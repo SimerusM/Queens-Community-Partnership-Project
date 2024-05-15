@@ -1,3 +1,4 @@
+// a library for MongoDB and Node.js that provides a straightforward, schema-based solution to model your application data
 const mongoose = require('mongoose') 
 
 const Schema = mongoose.Schema
